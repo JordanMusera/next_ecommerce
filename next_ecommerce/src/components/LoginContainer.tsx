@@ -1,24 +1,27 @@
 "use client"
 import axios from 'axios';
+import { NextResponse } from 'next/server';
 import React, { useState } from 'react'
 
 const LoginContainer = () => {
   const [userEmail,setUserEmail] = useState('')
   const [userPassword,setUserPassword] = useState('')
 
-const handleSubmit=(e: React.FormEvent<HTMLFormElement>)=>{
+const handleSubmit=async(e: React.FormEvent<HTMLFormElement>)=>{
   e.preventDefault();
   
-  const response = axios.post('http://localhost:3000/server/api/users',
+  const response = await fetch('/server/api/users',
   {
-    name:userEmail,password:userPassword
-  },
-  {
+    method:'POST',
     headers:{
       'Content-Type':'application/json'
     },
+    body:JSON.stringify({name:userEmail,password:userPassword}),
   }
-  )
+  );
+
+  console.log(response);
+  await NextResponse.json({response})
 }
 
   return (
